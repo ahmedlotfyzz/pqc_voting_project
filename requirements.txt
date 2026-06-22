@@ -1,0 +1,13 @@
+# Exact dependencies for reproducing the paper's results.
+# Python 3.11.6 recommended.
+
+liboqs-python==0.14.1
+numpy>=1.24
+scipy>=1.10
+matplotlib>=3.7
+cbor2>=5.4
+
+# Note: liboqs-python wraps the liboqs C library (v0.11.0).
+# On first import it will build/locate liboqs automatically.
+# See https://github.com/open-quantum-safe/liboqs-python for build prerequisites
+# (a C compiler and CMake are required).
