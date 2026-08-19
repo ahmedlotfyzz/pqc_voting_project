@@ -1,107 +1,170 @@
-# Post-Quantum Blockchain for Secure Data Transmission
+# Dilithium-Based Post-Quantum Blockchain Prototype
 
-**Reproducibility artifacts for:**
-*"Post-Quantum Blockchain for Secure Data Transmission: Design and Empirical Evaluation Using CRYSTALS-Dilithium2"* (INASS Express, Paper ID ex-20260050).
+This repository contains the **original baseline implementation** of the post-quantum blockchain prototype evaluated and subsequently extended in the study:
 
-This repository contains the complete implementation, raw result logs, and analysis
-scripts required to reproduce every table and figure in the manuscript. It is released
-in response to the editorial request for reproducible artifacts.
+**Implementation and Evaluation of a Dilithium-Based Post-Quantum Blockchain Prototype**
+
+The repository represents the earlier single-machine prototype and the initial experimental codebase developed using the **pre-standardization CRYSTALS-Dilithium2 parameter set**.
+
+It is retained as the original project repository for transparency and reproducibility of the baseline implementation.
 
 ---
 
-## 1. Overview
+## Repository Scope
 
-The project implements and empirically evaluates a four-layer quantum-resistant
-blockchain built on **CRYSTALS-Dilithium2** (NIST FIPS 204, ML-DSA-44) with a
-**Q-PnV-inspired** consensus mechanism. Evaluation covers cryptographic benchmarking,
-concurrent throughput, a quantum-inspired attack simulation, consensus validation, an
-adversarial attack suite, and storage analysis.
+The code in this repository corresponds to the **original baseline version of the prototype**.
 
-## 2. Repository structure
+It includes the core implementation used to investigate the integration of post-quantum digital signatures into a blockchain-style voting workload, including the principal components required for:
 
-```
-.
-├── README.md                  # this file
-├── requirements.txt           # exact Python dependencies
-├── ENVIRONMENT.md             # hardware/software environment + versions
-├── LICENSE                    # MIT license
-├── src/                       # all source scripts (run in numeric order)
-│   ├── 01_keygen.py           # Dilithium2 key generation
-│   ├── 02_sign.py             # record signing (Algorithm 1)
-│   ├── 03_verify.py           # dual-layer verification (Algorithm 2)
-│   ├── 04_blockchain.py       # block construction + hash-chain linking
-│   ├── 04_attack.py           # quantum-inspired attack simulation
-│   ├── 05_consensus.py        # Q-PnV weighted-stake consensus
-│   ├── 06_audit.py            # chain integrity / tamper-detection audit
-│   ├── 07_scale_test.py       # concurrent throughput test (n=1000, 4 threads)
-│   ├── 08_storage.py          # storage projection (JSON vs CBOR)
-│   ├── 09_attack_suite.py     # five-vector adversarial suite (seed=42)
-│   ├── 10_evaluation.py       # aggregates all results, computes CIs/percentiles
-│   ├── 11_dashboard.py        # generates summary figures
-│   └── benchmark.py           # standalone serial latency benchmark (n=500)
-├── results/                   # raw result logs (JSON) used in the paper
-│   ├── evaluation_report.json
-│   ├── scale_test_report.json
-│   └── storage_report.json
-└── figures/                   # generated figures
-```
+* key generation;
+* post-quantum signing and verification;
+* transaction and vote construction;
+* block creation;
+* validator-based approval;
+* blockchain validation;
+* baseline single-machine execution; and
+* the original performance evaluation workflow.
 
-## 3. Quick start
+This repository therefore documents the starting implementation from which the later experimental study was developed.
 
-```bash
-# 1. create a clean environment (Python 3.11)
-python3 -m venv venv
-source venv/bin/activate          # Windows: venv\Scripts\activate
+---
 
-# 2. install dependencies
-pip install -r requirements.txt
+## Relationship to the Current Study
 
-# 3. run the full pipeline in order
-python src/01_keygen.py
-python src/02_sign.py
-python src/03_verify.py
-python src/04_blockchain.py
-python src/04_attack.py
-python src/05_consensus.py
-python src/06_audit.py
-python src/07_scale_test.py
-python src/08_storage.py
-python src/09_attack_suite.py
-python src/10_evaluation.py        # produces evaluation_report.json
-python src/11_dashboard.py         # produces figures
-```
+The current manuscript substantially extends the original prototype beyond the experiments represented by this repository.
 
-All randomised steps use a fixed seed (`seed = 42`) for reproducibility.
+The extended evaluation reported in the manuscript includes:
 
-## 4. Mapping: paper tables/figures -> scripts & logs
+* comparison of the original CRYSTALS-Dilithium2 implementation with standardized **ML-DSA-44**;
+* cryptographic primitive benchmarking;
+* workload-scaling experiments;
+* weighted-validator approval experiments;
+* validation and security-control experiments;
+* identity-binding analysis;
+* serialization comparison between JSON and CBOR;
+* concurrency experiments;
+* single-host multi-process distributed emulation;
+* deadline and coordination testing; and
+* audited reproduction and validation of the reported results.
 
-| Paper item | Produced by | Raw log |
-|---|---|---|
-| Table 2 (latency, percentiles, CI) | `benchmark.py`, `10_evaluation.py` | `results/evaluation_report.json` |
-| Table 4 / Fig. 3 (throughput, n=1000) | `07_scale_test.py` | `results/scale_test_report.json` |
-| Table 3 / Fig. 2 (quantum simulation) | `04_attack.py` | (regenerated on run) |
-| Table 5 / Fig. 4 (Q-PnV consensus) | `05_consensus.py` | (regenerated on run) |
-| Table 6 (adversarial suite) | `09_attack_suite.py` | (regenerated on run) |
-| Fig. 5 / Fig. 6 (storage) | `08_storage.py` | `results/storage_report.json` |
-| Table 7 (deployment readiness) | `10_evaluation.py` | `results/evaluation_report.json` |
+These additional experiments were performed as part of the extended study and are **not all represented by the historical source code contained in this repository**.
 
-## 5. Statistical methodology
+The repository should therefore be interpreted as the **original baseline codebase**, rather than as the complete execution package for every experiment in the current manuscript.
 
-- **Percentiles** (P75/P90/P95/P99) are computed with NumPy linear interpolation
-  (`numpy.percentile(..., method="linear")`).
-- **95% CI on the mean** for the serial benchmark (n=500) uses the t-distribution
-  (df = n-1); for the concurrent test (n=1000) it uses 10,000-sample bootstrap
-  resampling. Both methods are reported explicitly in the paper.
-- **Effect size** between signing and verification uses the Mann-Whitney U test and
-  Cohen's d.
-- No outliers were removed; all raw samples are retained.
+---
 
-## 6. Citation
+## Experimental Data for the Current Manuscript
 
-If you use these artifacts, please cite the paper (full reference to be added on
-publication). DOI: `10.22266/inassexpress.20xx.00x`.
+The datasets generated and analyzed for the extended study are provided separately in the **reviewer-access archive accompanying the manuscript submission**.
 
-## 7. License
+That archive contains the original single-machine evaluation files and the (n = 1000) result files, together with the extended raw and audited-derived datasets supporting the:
 
-Released under the MIT License (see `LICENSE`). All figures, tables, and code are
-original works produced by the authors.
+* cryptographic comparison;
+* workload-scaling analysis;
+* weighted-approval experiments;
+* security-control experiments;
+* serialization experiments;
+* concurrency analysis; and
+* single-host distributed-emulation experiments.
+
+The reviewer archive also contains the source data supporting the manuscript figures and the final **E1–E8** and **F0–F10** result tables.
+
+A durable public repository DOI has not yet been assigned to these extended datasets.
+
+---
+
+## Baseline Cryptographic Configuration
+
+The original implementation in this repository was developed using the **pre-standardization CRYSTALS-Dilithium2 parameter set**.
+
+The current manuscript additionally evaluates migration to the standardized **ML-DSA-44** scheme defined under FIPS 204.
+
+These configurations should not be interpreted as identical implementations. The distinction between the legacy Dilithium2 implementation and the standardized ML-DSA-44 implementation is explicitly preserved in the current study.
+
+---
+
+## Reproducibility Scope
+
+This repository is intended to preserve the original implementation and baseline workflow.
+
+Accordingly:
+
+* baseline behavior can be inspected directly from the historical source code;
+* the repository documents the architecture from which the extended study originated;
+* some experiments in the current manuscript were performed using later experimental and auditing harnesses;
+* the extended experimental datasets are supplied separately with the manuscript submission; and
+* results in the current manuscript should be interpreted using the experimental protocol and evidence described in the manuscript and its accompanying reviewer-access archive.
+
+The repository is intentionally retained as the original codebase rather than being retrospectively modified to make it appear identical to the later experimental environment.
+
+---
+
+## Important Legacy-Code Note
+
+Some components in this repository represent **legacy prototype behavior** that was subsequently examined during the extended study.
+
+In particular, the current manuscript reports security and coordination analyses that identified implementation-level behaviors requiring explicit validation or correction.
+
+These findings are part of the research contribution of the extended study and should not be interpreted as undocumented modifications to the historical baseline.
+
+Where corrective logic was evaluated, the distinction between:
+
+1. the original behavior,
+2. the identified issue, and
+3. the separately evaluated correction
+
+is maintained in the manuscript and accompanying experimental evidence.
+
+---
+
+## Research Context
+
+The purpose of the project is not only to benchmark a post-quantum signature primitive.
+
+The extended study examines how migration to post-quantum signatures interacts with the surrounding blockchain implementation, including:
+
+* validation logic;
+* validator approval;
+* identity binding;
+* data representation;
+* concurrency; and
+* coordination behavior.
+
+The results therefore distinguish **cryptographic primitive performance** from **application-level correctness and system-level behavior**.
+
+---
+
+## Current Manuscript
+
+**Title:**
+*Implementation and Evaluation of a Dilithium-Based Post-Quantum Blockchain Prototype*
+
+The manuscript evaluates the original prototype together with an extended experimental framework designed to characterize both cryptographic and application-level effects of post-quantum migration.
+
+---
+
+## Data Availability
+
+The original project source code is publicly available in this repository.
+
+The extended raw and audited-derived datasets supporting the current manuscript are provided in the reviewer-access archive accompanying the submission.
+
+No durable public repository DOI has yet been assigned to the extended datasets.
+
+---
+
+## License and Use
+
+This repository is provided for academic research, inspection, and reproducibility purposes.
+
+Users of the code should take into account that it contains an **experimental research prototype** and historical baseline components. It is not intended to provide a production-ready blockchain, voting system, or security-critical deployment.
+
+---
+
+## Contact
+
+For questions concerning the repository or the associated research:
+
+**Ahmed Abdellatif**
+Misr University for Science and Technology
+6th of October City, Giza, Egypt
